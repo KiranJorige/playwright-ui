@@ -1,0 +1,24 @@
+{
+  "recommendations": [
+    // Playwright
+    "ms-playwright.playwright",
+
+    // Typescript & Javascript
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+
+    //Git
+    "eamodio.gitlens",
+    "github.vscode-github-actions",
+
+    // Code quality
+    "streetsidesoftware.code-spell-checker",
+    "christian-kohler.path-intellisense",
+    "visualstudioexptteam.vscodeintellicode",
+
+    // Utilities
+    "dotenv.dotenv-vscode",
+    "aaron-bond.better-comments",
+    "yzhang.markdown-all-in-one"
+  ]
+}
