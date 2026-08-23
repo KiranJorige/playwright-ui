@@ -23,8 +23,8 @@ export function loadEnv(): void {
 
   envLoaded = true;
 
-  // Default to "qa" when no environment is specified.
-  const envName = (process.env.ENV ?? process.env.ENVIRONMENT ?? "qa").toLowerCase();
+  // Default to "dev" when no environment is specified.
+  const envName = (process.env.ENV ?? process.env.ENVIRONMENT ?? "dev").toLowerCase();
 
   // Load environment-specific configuration. (non-sensitive: URLs, timeouts, log levels).
   // These are committed to git and safe to read in any context including CI/Docker.
@@ -33,14 +33,14 @@ export function loadEnv(): void {
   });
 
   // Fallback/support for uppercase environment file names.
-  dotenv.config({
-    path: path.resolve(process.cwd(), `config/.env.${envName.toUpperCase()}`),
-  });
+  // dotenv.config({
+  //   path: path.resolve(process.cwd(), `config/.env.${envName.toUpperCase()}`),
+  // });
 
   // Load overrides only - secrets must be injected by CI pipeline, not read from file.
   if (process.env.CI !== "true") {
     dotenv.config({
-      path: path.resolve(process.cwd(), ".env.local"),
+      path: path.resolve(process.cwd(), `config/.env.${envName}.local`),
     });
   }
 }
