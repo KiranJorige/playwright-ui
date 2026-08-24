@@ -3,8 +3,9 @@ import path from "path";
 
 import { Browser, expect, test as base } from "@playwright/test";
 
-import { DashboardPage } from "../pages/DashboardPage";
+import { getEnvVar } from "../utils/envHelper";
 import { LoginPage } from "../pages/LoginPage";
+import { DashboardPage } from "../pages/DashboardPage";
 import { UserManagementPage } from "../pages/UserManagementPage";
 import { UserBuilder } from "../test-data/builders/UserBuilder";
 import { EmployeeManagementPage } from "../pages/EmployeeManagementPage";
@@ -53,6 +54,7 @@ export const nonAuthTest = base.extend<PageFixtures>({
 
 async function isStorageStateValid(browser: Browser, storageStatePath: string): Promise<boolean> {
   const context = await browser.newContext({
+    baseURL: getEnvVar("BASE_URL"),
     storageState: storageStatePath,
   });
 
@@ -76,13 +78,19 @@ async function isStorageStateValid(browser: Browser, storageStatePath: string): 
 }
 
 export const test = nonAuthTest.extend<PageFixtures, WorkerFixtures>({
-  storageState: async ({ storageStatePath }, use) => {
-    await use(storageStatePath);
+  context: async ({ browser, storageStatePath }, use) => {
+    const context = await browser.newContext({
+      baseURL: getEnvVar("BASE_URL"),
+      storageState: storageStatePath,
+    });
+
+    await use(context);
+    await context.close();
   },
 
   storageStatePath: [
     async ({ browser }, use, workerInfo) => {
-      const authDir = ".auth";
+      const authDir = path.resolve(process.cwd(), ".auth");
 
       if (!fs.existsSync(authDir)) {
         fs.mkdirSync(authDir, { recursive: true });
@@ -99,21 +107,25 @@ export const test = nonAuthTest.extend<PageFixtures, WorkerFixtures>({
       }
 
       if (!authFileExists || !isValidAuth) {
-        const page = await browser.newPage();
-
-        const loginPage = new LoginPage(page);
-
-        await loginPage.navigate();
-
-        await loginPage.login(process.env.APP_USERNAME!, process.env.APP_PASSWORD!);
-
-        await page.context().storageState({
-          path: statePath,
+        const context = await browser.newContext({
+          baseURL: getEnvVar("BASE_URL"),
         });
+        const page = await context.newPage();
 
-        await page.close();
+        try {
+          const loginPage = new LoginPage(page);
+
+          await loginPage.navigate();
+          await loginPage.login(getEnvVar("APP_USERNAME"), getEnvVar("APP_PASSWORD"));
+
+          await expect(page).toHaveURL(/dashboard/i);
+          await expect(new DashboardPage(page).header).toBeVisible();
+
+          await context.storageState({ path: statePath });
+        } finally {
+          await context.close();
+        }
       }
-
       await use(statePath);
     },
     { scope: "worker" },
