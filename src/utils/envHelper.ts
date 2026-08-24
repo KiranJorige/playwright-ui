@@ -44,3 +44,20 @@ export function loadEnv(): void {
     });
   }
 }
+
+/**
+ * Returns a required environment variable.
+ * Throws a readable error if the variable is missing.
+ */
+
+export type EnvironmentVariable = "BASE_URL" | "APP_USERNAME" | "APP_PASSWORD";
+
+export function getEnvVar(name: EnvironmentVariable): string {
+  const value = process.env[name];
+
+  if (!value) {
+    throw new Error(`Environment variable '${name}' is missing`);
+  }
+
+  return value;
+}
