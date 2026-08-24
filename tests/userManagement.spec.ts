@@ -46,14 +46,14 @@ test.describe("User Management", { tag: ["@smoke"] }, () => {
     });
 
     await test.step("Verify created user is visible in the user list", async () => {
+      await userManagementPage.searchUser(user.username);
       await expect(
         userManagementPage.userRow(user.username, user.role),
         "Created username should be visible"
       ).toBeVisible();
     });
 
-    await test.step("Search existed user and click edit", async () => {
-      await userManagementPage.searchUser(user.username);
+    await test.step("click edit icon of existed user", async () => {
       await userManagementPage.clickEditUser(user.username);
     });
 
@@ -63,6 +63,7 @@ test.describe("User Management", { tag: ["@smoke"] }, () => {
     });
 
     await test.step(`Verify updated user is displayed with ${updatedRole} role`, async () => {
+      await userManagementPage.searchUser(user.username);
       await expect(
         userManagementPage.userRow(user.username, updatedRole),
         "Updated user should be displayed in search results"
@@ -88,14 +89,14 @@ test.describe("User Management", { tag: ["@smoke"] }, () => {
     });
 
     await test.step("Verify created user is visible in the user list", async () => {
+      await userManagementPage.searchUser(user.username);
       await expect(
         userManagementPage.userRow(user.username, user.role),
         "Created username should be visible"
       ).toBeVisible();
     });
 
-    await test.step("Search existed user and click delete", async () => {
-      await userManagementPage.searchUser(user.username);
+    await test.step("Click delete icon of existed user", async () => {
       await userManagementPage.deleteUser(user.username);
     });
 

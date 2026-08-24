@@ -192,6 +192,8 @@ export class UserManagementPage {
     await this.enterPassword(password);
     await this.enterConfirmPassword(password);
     await this.clickSave();
+    await this.locators.saveButton.waitFor({ state: "detached" });
+    await this.waitForLoaderToDisappear();
   }
 
   async deleteUser(username: string): Promise<void> {

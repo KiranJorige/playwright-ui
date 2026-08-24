@@ -1,29 +1,8 @@
 import { faker } from "@faker-js/faker";
-
-export const USER_ROLES = {
-  ADMIN: "Admin",
-  ESS: "ESS",
-} as const;
-
-export const USER_STATUS = {
-  ENABLED: "Enabled",
-  DISABLED: "Disabled",
-} as const;
-
-export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
-
-export type UserStatus = (typeof USER_STATUS)[keyof typeof USER_STATUS];
-
-export type User = {
-  employeeName: string;
-  role: UserRole;
-  status: UserStatus;
-  username: string;
-  password: string;
-};
+import { User, UserRole, UserStatus, USER_ROLES, USER_STATUS } from "../../types/DomainModels";
 
 export class UserBuilder {
-  private user = {
+  private user: User = {
     employeeName: "Orange Test",
     role: USER_ROLES.ADMIN as UserRole,
     status: USER_STATUS.ENABLED as UserStatus,

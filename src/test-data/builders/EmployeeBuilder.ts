@@ -1,7 +1,8 @@
 import { faker } from "@faker-js/faker";
+import { Employee } from "../../types/DomainModels";
 
 export class EmployeeBuilder {
-  private employee = {
+  private employee: Employee = {
     firstName: faker.person.firstName(),
     middleName: faker.person.middleName(),
     lastName: faker.person.lastName(),

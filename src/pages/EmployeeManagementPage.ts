@@ -85,7 +85,7 @@ export class EmployeeManagementPage {
   }
 
   async clickAddEmployeeButton(): Promise<void> {
-    this.locators.addEmployeeButton.click();
+    await this.locators.addEmployeeButton.click();
   }
 
   async navigate(): Promise<void> {

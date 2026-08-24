@@ -15,8 +15,8 @@ export class LoginPageLocators {
     return this.page.getByRole("button", { name: "Login" });
   }
 
-  get invalidCredentialsMessage(): Locator {
-    return this.page.getByText("Invalid credentials");
+  get loginErrorMessage(): Locator {
+    return this.page.locator("p.oxd-alert-content-text");
   }
 }
 
@@ -49,8 +49,8 @@ export class LoginPage {
     await this.locators.loginButton.click();
   }
 
-  get invalidCredentialsMessage(): Locator {
-    return this.locators.invalidCredentialsMessage;
+  get loginErrorMessage(): Locator {
+    return this.locators.loginErrorMessage;
   }
 
   async login(username: string, password: string): Promise<void> {
