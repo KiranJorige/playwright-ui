@@ -1,4 +1,5 @@
 import { nonAuthTest as test, expect } from "../src/fixtures/fixtures";
+import { getEnvVar } from "../src/utils/envHelper";
 
 test.describe("Login", { tag: ["@smoke"] }, () => {
   test("Valid user can login successfully", async ({ loginPage, dashboardPage, page }) => {
@@ -7,7 +8,7 @@ test.describe("Login", { tag: ["@smoke"] }, () => {
     });
 
     await test.step("Login using valid credentials", async () => {
-      await loginPage.login(process.env.APP_USERNAME!, process.env.APP_PASSWORD!);
+      await loginPage.login(getEnvVar("APP_USERNAME"), getEnvVar("APP_PASSWORD"));
     });
 
     await test.step("Verify dashboard is displayed", async () => {
@@ -23,17 +24,17 @@ test.describe("Login", { tag: ["@smoke"] }, () => {
     });
 
     await test.step("Login using invalid credentials", async () => {
-      await loginPage.login(process.env.APP_USERNAME!, "WrongPassword123!");
+      await loginPage.login(getEnvVar("APP_USERNAME"), "WrongPassword123!");
     });
 
     await test.step("Verify login failure message is displayed", async () => {
       await expect(page).toHaveURL(/login/i);
       await expect(
-        loginPage.invalidCredentialsMessage,
+        loginPage.loginErrorMessage,
         "Invalid credentials message should be visible"
       ).toBeVisible();
       await expect(
-        loginPage.invalidCredentialsMessage,
+        loginPage.loginErrorMessage,
         "Invalid credentials message should display correct text"
       ).toHaveText("Invalid credentials");
     });
