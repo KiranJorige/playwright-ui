@@ -107,7 +107,7 @@ export class EmployeeManagementPage {
     await this.locators.lastNameInput.fill(lastName);
     await this.locators.employeeIdInput.fill(employeeId);
     await this.locators.saveButton.click();
-    await this.locators.saveButton.waitFor({ state: "hidden" });
+    await this.page.waitForURL(/viewPersonalDetails/);
     await this.waitForLoaderToDisappear();
   }
 
