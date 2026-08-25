@@ -122,6 +122,7 @@ export class UserManagementPage {
   }
 
   async searchUser(username: string): Promise<void> {
+    await this.locators.searchButton.waitFor({ state: "visible" });
     await this.locators.usernameSearchInput.fill(username);
     await this.locators.searchButton.click();
   }
